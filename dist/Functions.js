@@ -1,5 +1,5 @@
-export function AddToHeadWithoutDup(htmlList) {
-
+export
+    function AddToHeadWithoutDup(htmlList, onload) {
     //如果头文件中没有jquery，就添加jquery
     if (typeof jQuery == 'undefined') {
         var script = document.createElement('script');
@@ -25,20 +25,51 @@ export function AddToHeadWithoutDup(htmlList) {
         }
     });
 
+
+    var tolNum = 0;
+    var currNum = 0;
     htmlList.forEach(element => {
         //获得src或href
-        var src = '';
+        var link = '';
+        var dom;
+
+
         if (element.indexOf('script') != -1) {
-            src = $(element).attr('src');
+            link = $(element).attr('src');
+            //如果link已经存在，就不再加载
+            if (linkList.indexOf(link) != -1) {
+                return;
+            }
+            tolNum++;
+            console.log(link);
+            dom = document.createElement('script');
+            dom.src = link;
+            dom.type = 'text/javascript';
+
         } else if (element.indexOf('link') != -1) {
-            src = $(element).attr('href');
+            link = $(element).attr('href');
+            //如果link已经存在，就不再加载
+            if (linkList.indexOf(link) != -1) {
+                return;
+            }
+            tolNum++;
+            dom = document.createElement('link');
+            dom.href = link;
+            dom.rel = 'stylesheet';
+
         }
 
-        //判断是否存在
-        if (linkList.indexOf(src) == -1) {
-            //插入到head
-            $('head').append(element);
+        dom.onload = function () {
+            currNum++;
+
+            if (currNum == tolNum) {
+                onload();
+            }
         }
+        //插入到head
+        document.head.appendChild(dom);
+
+
     });
 
 }
