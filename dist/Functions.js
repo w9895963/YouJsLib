@@ -1,5 +1,4 @@
-export
-    function AddToHeadWithoutDup(htmlList, onload) {
+export function AddToHeadWithoutDup(htmlList, onload) {
     //如果头文件中没有jquery，就添加jquery
     if (typeof jQuery == 'undefined') {
         var script = document.createElement('script');
@@ -41,7 +40,6 @@ export
                 return;
             }
             tolNum++;
-            console.log(link);
             dom = document.createElement('script');
             dom.src = link;
             dom.type = 'text/javascript';
