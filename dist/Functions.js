@@ -99,3 +99,24 @@ export async function AddToHeadIfNotExist(htmlList) {
 
 
 
+export const Data = {
+    vueUi注入依赖库列表: [
+        '//unpkg.com/jquery.min.js',//jquery
+        '//unpkg.com/vue@3/dist/vue.global.prod.js',//vue
+        '//unpkg.com/element-plus/dist/index.css',//elementUI.css
+        '//unpkg.com/element-plus/dist/index.full.min.js',//elementUI.js
+    ],
+};
+
+
+
+
+//导入vueUi注入依赖库
+export async function ImportVueUiInjectDependencies () {
+
+
+
+
+
+    await AddToHeadIfNotExist(Data.vueUi注入依赖库列表);
+}
