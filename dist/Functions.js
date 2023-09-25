@@ -1,73 +1,55 @@
-export function AddToHeadWithoutDup(htmlList, onload) {
-    //如果头文件中没有jquery，就添加jquery
-    if (typeof jQuery == 'undefined') {
-        var script = document.createElement('script');
-        script.src = "//unpkg.com/jquery.min.js";
-        document.head.appendChild(script);
-    }
 
 
 
 
-    //找出网页头的所有scr和href
+
+
+export function AddToHeadIfNotExist(htmlList, onload) {
+    //*获得网页头的所有scr和href
     var linkList = [];
-    $('script').each(function () {
-        var src = $(this).attr('src');
+    document.querySelectorAll('script').forEach(function (element) {
+        var src = element.getAttribute('src');
         if (src) {
             linkList.push(src);
         }
     });
-    $('link').each(function () {
-        var href = $(this).attr('href');
+    document.querySelectorAll('link').forEach(function (element) {
+        var href = element.getAttribute('href');
         if (href) {
             linkList.push(href);
         }
     });
 
+    //*获得所有不重复的链接
+    var uniqueLinkList = [];
+    uniqueLinkList = htmlList.filter(it => !linkList.includes(it));
 
-    var tolNum = 0;
-    var currNum = 0;
-    htmlList.forEach(element => {
-        //获得src或href
-        var link = '';
-        var dom;
-
-
-        if (element.indexOf('script') != -1) {
-            link = $(element).attr('src');
-            //如果link已经存在，就不再加载
-            if (linkList.indexOf(link) != -1) {
-                return;
-            }
-            tolNum++;
-            dom = document.createElement('script');
+    //*生成对应的dom
+    var domList = [];
+    uniqueLinkList.forEach(link => {
+        if (link.endsWith('.js')) {
+            var dom = document.createElement('script');
             dom.src = link;
             dom.type = 'text/javascript';
-
-        } else if (element.indexOf('link') != -1) {
-            link = $(element).attr('href');
-            //如果link已经存在，就不再加载
-            if (linkList.indexOf(link) != -1) {
-                return;
-            }
-            tolNum++;
-            dom = document.createElement('link');
+            domList.push(dom);
+        } else if (link.endsWith('.css')) {
+            var dom = document.createElement('link');
             dom.href = link;
             dom.rel = 'stylesheet';
-
+            domList.push(dom);
         }
-
-        dom.onload = function () {
-            currNum++;
-
-            if (currNum == tolNum) {
-                onload();
-            }
-        }
-        //插入到head
-        document.head.appendChild(dom);
-
-
     });
+
+
+    //*加载dom
+    document.head.append(...domList);
+
+    //*等待加载完毕
+    async function waitLoad(domList) {
+        let promises = domList.map(dom => new Promise((resolve) => dom.onload = resolve));
+        await Promise.all(promises);
+    }
+    waitLoad(domList).then(onload);
+
 
 }
