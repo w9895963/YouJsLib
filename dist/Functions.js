@@ -4,7 +4,14 @@
 
 
 
-export function AddToHeadIfNotExist(htmlList, onload) {
+export async function AddToHeadIfNotExist(htmlList) {
+    //*初始化全局变量
+    if (typeof data_AddToHeadIfNotExist == 'undefined') {
+        data_AddToHeadIfNotExist = {
+            正在加载的脚本: [],
+        };
+    }
+
     //*获得网页头的所有scr和href
     var linkList = [];
     document.querySelectorAll('script').forEach(function (element) {
@@ -20,36 +27,65 @@ export function AddToHeadIfNotExist(htmlList, onload) {
         }
     });
 
-    //*获得所有不重复的链接
-    var uniqueLinkList = [];
-    uniqueLinkList = htmlList.filter(it => !linkList.includes(it));
+    //*需要新建的链接
+    var linkToBeCreated = [];
+    linkToBeCreated = htmlList.filter(it => !linkList.includes(it));
+    //已经存在的链接
+    var linkAlreadyExist = htmlList.filter(it => linkList.includes(it));
 
-    //*生成对应的dom
-    var domList = [];
-    uniqueLinkList.forEach(link => {
+
+
+
+    //*将要新建的dom
+    var domListToWrite = [];
+    linkToBeCreated.forEach(link => {
         if (link.endsWith('.js')) {
             var dom = document.createElement('script');
             dom.src = link;
             dom.type = 'text/javascript';
-            domList.push(dom);
+            domListToWrite.push({
+                dom: dom,
+                link: link,
+            });
         } else if (link.endsWith('.css')) {
             var dom = document.createElement('link');
             dom.href = link;
             dom.rel = 'stylesheet';
-            domList.push(dom);
+            domListToWrite.push({
+                dom: dom,
+                link: link,
+            });
         }
     });
 
+    //*正在加载的dom
+    var domListLoading = data_AddToHeadIfNotExist.正在加载的脚本.filter(it => linkAlreadyExist.includes(it.link));
 
-    //*加载dom
-    document.head.append(...domList);
+
+    //*新建dom
+    document.head.append(...domListToWrite.map(it => it.dom));
+
+
+    //*在全局数据中添加正在加载的脚本
+    data_AddToHeadIfNotExist.正在加载的脚本.push(...domListToWrite);
+    //载入完成后，移除对应数据
+    domListToWrite.forEach(domData => {
+        domData.dom.addEventListener('load', () => {
+            //移除
+            data_AddToHeadIfNotExist.正在加载的脚本.splice(data_AddToHeadIfNotExist.正在加载的脚本.indexOf(domData), 1);
+        });
+    });
+
+
 
     //*等待加载完毕
+    var domsToWaitForLoading = [...domListToWrite, ...domListLoading];
     async function waitLoad(domList) {
-        let promises = domList.map(dom => new Promise((resolve) => dom.onload = resolve));
+        let promises = domList.map(domData => new Promise((resolve) => domData.dom.addEventListener('load', resolve)));
         await Promise.all(promises);
     }
-    waitLoad(domList).then(onload);
+    await waitLoad(domsToWaitForLoading);
+
 
 
 }
