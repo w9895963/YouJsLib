@@ -1,13 +1,10 @@
 
 
 
-var Enumerable;
-
-await main();
 
 
 
-async function main() {
+export default async function () {
     var vueUi注入依赖库列表 = [
         'https://unpkg.com/jquery.min.js',//jquery
         'https://unpkg.com/vue@3/dist/vue.global.prod.js',//vue
@@ -20,7 +17,6 @@ async function main() {
     await fn.AddToHeadIfNotExist(vueUi注入依赖库列表);
 
 
-    //
-    Enumerable = (await import('https://cdnjs.cloudflare.com/ajax/libs/linq.js/4.0.1/linq.min.js')).default;//linq.js
+    window.Enumerable = (await import('https://cdnjs.cloudflare.com/ajax/libs/linq.js/4.0.1/linq.min.js')).default;//linq.js
 
 }
