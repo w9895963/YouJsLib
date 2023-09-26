@@ -3,7 +3,7 @@
 
 var Enumerable;
 
-main();
+await main();
 
 
 
