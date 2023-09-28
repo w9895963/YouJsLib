@@ -18,9 +18,6 @@ export default async function () {
         {
             link: 'https://cdn.staticfile.org/element-plus/2.3.14/index.full.min.js',//elementUI.js
         },
-        {
-            link: 'https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css',
-        }
 
     ]
     
