@@ -9,9 +9,22 @@
  *@param htmlList {link,type}[]
  *========================================================================**/
 export async function addToHeadIfNotExist(htmlList/*{link,type}[]*/) {
+    const jqueryLink = 'https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js';
+
+
+    //*如果没有jquery,则加载jquery
+    if (typeof $ == 'undefined') {
+        await new Promise((resolve) => {
+            var script = document.createElement('script');
+            script.src = jqueryLink;
+            script.type = 'text/javascript';
+            script.addEventListener('load', resolve);
+            document.head.append(script);
+        });
+    }
 
     //*等待网页加载完毕
-    await new Promise((resolve) => window.addEventListener('load', resolve));
+    await new Promise((resolve) => $(resolve));
 
 
     //*获得每个链接的类型

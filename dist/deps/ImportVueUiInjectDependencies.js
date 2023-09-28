@@ -26,7 +26,7 @@ export default async function () {
     
 
 
-    var fn = await import("https://jsd.onmicrosoft.cn/gh/w9895963/YouJsLib@1.0.11/dist/Functions.js")
+    var fn = await import("https://jsd.onmicrosoft.cn/gh/w9895963/YouJsLib@1.0.12/dist/Functions.js")
 
     await fn.addToHeadIfNotExist(vueUi注入依赖库列表);
 
