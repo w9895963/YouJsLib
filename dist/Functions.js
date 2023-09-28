@@ -6,9 +6,24 @@
 /**========================================================================
  **                           加载依赖的js和css脚本
  *?  将脚本加到head上,根据文件后缀判断是js还是css,并且等待加载完毕,不会重复加载
- *@param htmlList 这个变量是一个数组,数组中的每一个字符串,代表一个js或者css的链接
+ *@param htmlList {link,type}[]
  *========================================================================**/
-export async function AddToHeadIfNotExist(htmlList) {
+export async function addToHeadIfNotExist(htmlList/*{link,type}[]*/) {
+
+    //*等待网页加载完毕
+    await new Promise((resolve) => window.addEventListener('load', resolve));
+
+
+    //*获得每个链接的类型
+    htmlList.forEach(it => {
+        if (!it.type) {
+            if (it.link.endsWith('.js')) {
+                it.type = 'js';
+            } else if (it.link.endsWith('.css')) {
+                it.type = 'css';
+            }
+        }
+    });
 
     //*初始化全局变量
     if (typeof window.data_AddToHeadIfNotExist == 'undefined') {
@@ -35,31 +50,31 @@ export async function AddToHeadIfNotExist(htmlList) {
 
     //*需要新建的链接
     var linkToBeCreated = [];
-    linkToBeCreated = htmlList.filter(it => !linkList.includes(it));
+    linkToBeCreated = htmlList.filter(it => !linkList.includes(it.link));
     //已经存在的链接
-    var linkAlreadyExist = htmlList.filter(it => linkList.includes(it));
+    var linkAlreadyExist = htmlList.filter(it => linkList.includes(it.link));
 
 
 
 
     //*将要新建的dom
     var domListToWrite = [];
-    linkToBeCreated.forEach(link => {
-        if (link.endsWith('.js')) {
+    linkToBeCreated.forEach(linkData => {
+        if (linkData.type == 'js') {
             var dom = document.createElement('script');
-            dom.src = link;
+            dom.src = linkData.link;
             dom.type = 'text/javascript';
             domListToWrite.push({
                 dom: dom,
-                link: link,
+                link: linkData.link,
             });
-        } else if (link.endsWith('.css')) {
+        } else if (linkData.type == 'css') {
             var dom = document.createElement('link');
-            dom.href = link;
+            dom.href = linkData.link;
             dom.rel = 'stylesheet';
             domListToWrite.push({
                 dom: dom,
-                link: link,
+                link: linkData.link,
             });
         }
     });
