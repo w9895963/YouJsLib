@@ -70,7 +70,10 @@
         box-shadow: 0px 0px 4px 1px #715151;
 
     }
-
+    /* 主内容小标题 */
+    .crumb-list {
+        padding-left: 80px;
+    }
 
 
 
