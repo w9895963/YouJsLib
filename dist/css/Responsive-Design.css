@@ -29,9 +29,10 @@ box-shadow:  2px 2px 20px #a0a0a0,
 /* Main wrap */
 #form1 .main-wrap {
     margin-left: 0px;
-    flex: 0 0 auto;
-    width: max-content;
-    max-width: 1600px;
+    flex: 1 1 auto;
+    /* width: max-content; */
+    /* max-width: 1600px; */
+    /* min-width: 400px; */
 }
 
 
@@ -70,7 +71,7 @@ box-shadow:  2px 2px 20px #a0a0a0,
 
 #form1 .container {
     display: flex;
-    width: fit-content;
+    width: 100%;
     margin: auto;
 }
 
@@ -113,4 +114,8 @@ box-shadow:  2px 2px 20px #a0a0a0,
 
 .crumb-wrap {
     margin-bottom: 20px;
+}
+
+.result-wrap {
+    min-width: 1000px;
 }
