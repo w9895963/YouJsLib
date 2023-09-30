@@ -11,6 +11,10 @@ form#form1 {width: fit-content;flex: 1 0 auto;}
 #form1 .topbar-wrap {
     height: auto;
     width: 100%;
+   
+background: #000000;
+box-shadow:  2px 2px 20px #a0a0a0,
+             -5px -5px 20px #9d9d9d42;
 }
 
 
@@ -27,6 +31,7 @@ form#form1 {width: fit-content;flex: 1 0 auto;}
     margin-left: 0px;
     flex: 0 0 auto;
     width: max-content;
+    max-width: 1600px;
 }
 
 
@@ -41,17 +46,25 @@ form#form1 {width: fit-content;flex: 1 0 auto;}
 }
 
 
+
 .sidebar-wrap .sidebar-title .menu {
     display: flex;
     width: 70px;
     height: 70px;
     flex: 0 0 auto;
+    color: #2f96b4;
+    transition-property: all;
+    transition-duration: 0.5s;
+    transform: rotateY(-180deg);
 }
 
 /* 大于等于1200 */
 @media (min-width:1201px) {
     .shrink-ns {
         width: 50px;
+    }
+   .sidebar-wrap .sidebar-title .shrinkMenu-ns {
+        transform: rotateY(45deg) translateX(-12px);
     }
 }
 
@@ -74,8 +87,10 @@ form#form1 {width: fit-content;flex: 1 0 auto;}
     /* Sidebar wrap */
     #form1 .sidebar-wrap {
         position: absolute;
-        box-shadow: 0px 0px 4px 1px #715151;
-
+        border-radius: 9px;
+        background: #ebebeb;
+        box-shadow: 5px 5px 58px #e0e0e0,
+                     0px 0px 0px #ffffff;
     }
     /* 主内容小标题 */
     .crumb-list {
@@ -91,7 +106,9 @@ form#form1 {width: fit-content;flex: 1 0 auto;}
         width: 70px;
 
     }
-
+    .sidebar-wrap .sidebar-title .menu.shrinkMenu {
+        transform: rotateY(0deg);
+    }
 }
 
 .crumb-wrap {
