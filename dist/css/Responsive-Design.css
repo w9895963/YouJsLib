@@ -1,12 +1,16 @@
 /*
 *这个css文件是用来将网站改为手机和电脑都能看的样式
 */
+body{
+    display: flex;
+}
 
-
+form#form1 {width: fit-content;flex: 1 0 auto;}
 
 /* 修复顶部标题背景 */
 #form1 .topbar-wrap {
-    height: auto !important;
+    height: auto;
+    width: 100%;
 }
 
 
@@ -21,7 +25,7 @@
 /* Main wrap */
 #form1 .main-wrap {
     margin-left: 0px;
-    flex: 1 0 auto;
+    flex: 0 0 auto;
     width: max-content;
 }
 
@@ -53,6 +57,8 @@
 
 #form1 .container {
     display: flex;
+    width: fit-content;
+    margin: auto;
 }
 
 #form1 .sidebar-wrap .sidebar-title {
@@ -62,9 +68,7 @@
 
 /* 将左侧改为绝对定位,并且将右侧内容区域变为全屏*/
 @media (max-width:1200px) {
-    #form1 .container {
-        display: block;
-    }
+   
 
 
     /* Sidebar wrap */
@@ -88,4 +92,8 @@
 
     }
 
+}
+
+.crumb-wrap {
+    margin-bottom: 20px;
 }
