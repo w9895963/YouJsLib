@@ -51,8 +51,8 @@ export default async function createPlugin({
                         const 所有要统计的格子 = 所有格子.not(所有格子.last());
                         const 最后的格子 = 所有格子.last();
                         function 计算总数(格子) {
-                            第一格的所有文字 = 格子.first().text();
-                            总数 = Enumerable.from(格子).select(i => $(i).text()).sum(i => parseFloat(i));
+                            const 第一格的所有文字 = 格子.first().text();
+                            const 总数 = Enumerable.from(格子).select(i => $(i).text()).sum(i => parseFloat(i));
                             //如果有小数,就只保留两位小数
                             总数 = 总数 % 1 == 0 ? 总数 : 总数.toFixed(2);
                             //将第一格的所有文字里的数值替换为总数
