@@ -42,14 +42,14 @@ export default async function createPlugin({
                 Enumerable.from(过滤列索引)
                     .select(i => {
                         //选择显示的 tr 下 第i个 td 
-                        选择器 = `tr:visible td:nth-child(${i + 1})`;
-                        所有格子 = $(表格选择器).first().find(选择器);
+                        const 选择器 = `tr:visible td:nth-child(${i + 1})`;
+                        const 所有格子 = $(表格选择器).first().find(选择器);
                         return 所有格子;
                     })
                     .forEach(所有格子 => {
                         //将格子最后一个的内容替换为其余所有的统计结果
-                        所有要统计的格子 = 所有格子.not(所有格子.last());
-                        最后的格子 = 所有格子.last();
+                        const 所有要统计的格子 = 所有格子.not(所有格子.last());
+                        const 最后的格子 = 所有格子.last();
                         function 计算总数(格子) {
                             第一格的所有文字 = 格子.first().text();
                             总数 = Enumerable.from(格子).select(i => $(i).text()).sum(i => parseFloat(i));
@@ -72,5 +72,6 @@ export default async function createPlugin({
     })
         .use(ElementPlus)
         .mount(`#${随机id}`);
+
 
 }
