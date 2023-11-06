@@ -1,5 +1,5 @@
 /**========================================================================
- **                           一件省份开关
+ **                           一键省份开关
  *?  
  *?  
  *========================================================================**/
@@ -10,6 +10,7 @@
 
 export default function loadPlugin({
     插入位置 = '.result-wrap',
+    搜索框长度 = 320,
 } = {}) {
 
 
@@ -27,24 +28,49 @@ export default function loadPlugin({
 
         const Comp = {
             template: /* template */`
+            <div style="display: inline-block;width: ${搜索框长度}px">
                 <el-input
                     v-model="input"
+                    type="textarea"
+                    autosize="true"
                     @input="change"
                     ref="inputRef"
-                    :clearable="true"
                     placeholder="省份"
-                    style="display: inline-block; width: 200px;"
+                    :formatter="formatter"
                 />
-                <el-button-group>
-                    <el-button type="primary" @click="add">新增</el-button>
-                    <el-button type="primary" @click="remove">停止</el-button>
-                    <el-button type="primary" @click="update">批量</el-button>
+            </div>
+            <el-button-group >
+                <el-tooltip content="清空输入">
+                    <el-button type="primary" @click="()=>{input='';change();}">清空</el-button>
+                </el-tooltip>
+                <el-tooltip content="将选中省份打开">
+                    <el-button type="primary" @click="add">打开</el-button>
+                </el-tooltip>
+                <el-tooltip content="将选中省份关闭">
+                    <el-button type="primary" @click="remove">关闭</el-button>
+                </el-tooltip>
+                <el-tooltip content="将选中省份打开,其余所有省份关闭">
+                    <el-button type="primary" @click="update">批量更新</el-button>
+                </el-tooltip>
+                <el-tooltip content="刷新网页,不会触发提交">
                     <el-button type="primary" @click="refresh">刷新</el-button>
-                </el-button-group>
+                </el-tooltip>
+            </el-button-group>
                 `,
             setup() {
                 const input = ref('');
                 var allLines = null;
+                function formatter(value) {
+                    const provinces = Enumerable.from($('.result-content tbody>tr'))
+                        .skip(1) //去掉第一个
+                        .select(it => $(it).find('td:nth-child(3)>span:first').text()).toArray();
+
+                    var pr = Enumerable.from(provinces).where(x => value.includes(x)).toArray();
+                    //将省份用逗号隔开
+                    pr = pr.join(",");
+                    console.log(pr);
+                    return pr;
+                }
                 function SetMatchLineToValue(valToSet, resetAllToZero = false) {
                     if (allLines == null) {
                         allLines = Enumerable.from($('.result-content tbody>tr'))
@@ -111,6 +137,7 @@ export default function loadPlugin({
                 }
 
                 return {
+                    formatter,
                     add,
                     remove,
                     update,
