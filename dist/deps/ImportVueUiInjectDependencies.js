@@ -9,10 +9,10 @@
 export default async function () {
 
 
-    jqueryLink = 'https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js';
-    VueLink = 'https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js';
-    elementUILink = 'https://cdn.staticfile.org/element-plus/2.3.14/index.full.min.js';
-    elementUICssLink = 'https://cdn.staticfile.org/element-plus/2.3.14/index.min.css';
+   const jqueryLink = 'https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js';
+   const VueLink = 'https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js';
+   const elementUILink = 'https://cdn.staticfile.org/element-plus/2.3.14/index.full.min.js';
+   const elementUICssLink = 'https://cdn.staticfile.org/element-plus/2.3.14/index.min.css';
 
 
 
