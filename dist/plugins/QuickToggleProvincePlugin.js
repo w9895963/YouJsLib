@@ -17,7 +17,7 @@ export default function loadPlugin({
 
     async function createPlugin() {
 
-        var 依赖 = 'https://jsd.onmicrosoft.cn/gh/w9895963/YouJsLib@v1.2.0/dist/deps/ImportVueUiInjectDependencies.js';
+        var 依赖 = 'https://jsd.onmicrosoft.cn/gh/w9895963/YouJsLib@v1.2.1/dist/deps/ImportVueUiInjectDependencies.js';
         await (await import(依赖)).default();
         const { createApp, ref } = Vue;
 
