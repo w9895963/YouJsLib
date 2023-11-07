@@ -7,27 +7,47 @@
 
 
 export default async function () {
-    var vueUi注入依赖库列表 = [
-        {
-            link: 'https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js',//jquery
-        },
-        {
-            link: 'https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js',//vue
-        },
-        {
-            link: 'https://cdn.staticfile.org/element-plus/2.3.14/index.min.css',//elementUI.css
-        },
-        {
-            link: 'https://cdn.staticfile.org/element-plus/2.3.14/index.full.min.js',//elementUI.js
-        },
 
-    ]
+
+    jqueryLink = 'https://cdn.staticfile.org/jquery/3.7.1/jquery.min.js';
+    VueLink = 'https://cdn.staticfile.org/vue/3.3.4/vue.global.prod.min.js';
+    elementUILink = 'https://cdn.staticfile.org/element-plus/2.3.14/index.full.min.js';
+    elementUICssLink = 'https://cdn.staticfile.org/element-plus/2.3.14/index.min.css';
 
 
 
-    var fn = await import("https://jsd.onmicrosoft.cn/gh/w9895963/YouJsLib@1.0.12/dist/Functions.js")
+    //如果没有jquery,则加载jquery
+    if (typeof $ == 'undefined') {
+        await new Promise((resolve) => {
+            var script = document.createElement('script');
+            script.src = jqueryLink;
+            script.type = 'text/javascript';
+            script.addEventListener('load', resolve);
+            document.head.append(script);
+        })
+    }
+    await new Promise((resolve) => {
+        var script = document.createElement('script');
+        script.src = VueLink;
+        script.type = 'text/javascript';
+        script.addEventListener('load', resolve);
+        document.head.append(script);
+    })
+    await new Promise((resolve) => {
+        var script = document.createElement('script');
+        script.src = elementUILink;
+        script.type = 'text/javascript';
+        script.addEventListener('load', resolve);
+        document.head.append(script);
+    })
+    await new Promise((resolve) => {
+        var script = document.createElement('link');
+        script.href = elementUICssLink;
+        script.type = 'text/css';
+        script.addEventListener('load', resolve);
+        document.head.append(script);
+    })
 
-    await fn.addToHeadIfNotExist(vueUi注入依赖库列表);
 
 
     window.Enumerable = (await import('https://cdn.staticfile.org/linq.js/4.0.1/linq.min.js')).default;//linq.js
