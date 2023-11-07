@@ -1,5 +1,5 @@
 /**========================================================================
- **                           一键省份开关
+ **                         * *快捷工具栏-省份开关* *
  *?  
  *?  
  *========================================================================**/
@@ -33,24 +33,27 @@ export default function loadPlugin({
                         v-model="input"
                         type="textarea"
                         autosize="true"
-                        @input="change"
+                        @change="change"
                         ref="inputRef"
                         placeholder="省份"
-                        :formatter="formatter"
+                        
                     />
                 </div>
                 <el-button-group >
                     <el-tooltip content="清空输入">
                         <el-button type="primary" @click="()=>{input='';change();}">清空</el-button>
                     </el-tooltip>
-                    <el-tooltip content="将选中省份打开">
+                    <el-tooltip content="将选中省份打开,其余不变">
                         <el-button type="primary" @click="add">打开</el-button>
                     </el-tooltip>
-                    <el-tooltip content="将选中省份关闭">
+                    <el-tooltip content="将选中省份关闭,其余不变">
                         <el-button type="primary" @click="remove">关闭</el-button>
                     </el-tooltip>
                     <el-tooltip content="将选中省份打开,其余所有省份关闭">
                         <el-button type="primary" @click="update">批量更新</el-button>
+                    </el-tooltip>
+                    <el-tooltip content="提交修改">
+                        <el-button type="primary" @click="ClickToPost">提交</el-button>
                     </el-tooltip>
                     <el-tooltip content="刷新网页,不会触发提交">
                         <el-button type="primary" @click="refresh">刷新</el-button>
@@ -100,17 +103,14 @@ export default function loadPlugin({
                 }
                 function add() {
                     SetMatchLineToValue(1);
-                    ClickToPost();
                 }
                 function remove() {
                     SetMatchLineToValue(0);
-                    ClickToPost();
                 }
                 function update() {
                     SetMatchLineToValue(1, true);
-                    ClickToPost();
-
                 }
+               
                 function refresh() {
                     //获得当前页地址
                     var url = window.location.href;
@@ -119,7 +119,9 @@ export default function loadPlugin({
 
                 }
                 function change() {
-                    // 选择每一行的第三个td
+                    //格式化
+                    input.value = formatter(input.value);
+                    // 高亮
                     $('.result-content tbody>tr').each(function () {
                         var v = $(this).find('td:nth-child(3)>span:first').text();
                         //v去掉空白
@@ -140,6 +142,7 @@ export default function loadPlugin({
                     add,
                     remove,
                     update,
+                    ClickToPost,
                     change,
                     refresh,
                     input,
