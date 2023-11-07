@@ -28,34 +28,34 @@ export default function loadPlugin({
 
         const Comp = {
             template: /* template */`
-            <div style="display: inline-block;width: ${搜索框长度}px">
-                <el-input
-                    v-model="input"
-                    type="textarea"
-                    autosize="true"
-                    @input="change"
-                    ref="inputRef"
-                    placeholder="省份"
-                    :formatter="formatter"
-                />
-            </div>
-            <el-button-group >
-                <el-tooltip content="清空输入">
-                    <el-button type="primary" @click="()=>{input='';change();}">清空</el-button>
-                </el-tooltip>
-                <el-tooltip content="将选中省份打开">
-                    <el-button type="primary" @click="add">打开</el-button>
-                </el-tooltip>
-                <el-tooltip content="将选中省份关闭">
-                    <el-button type="primary" @click="remove">关闭</el-button>
-                </el-tooltip>
-                <el-tooltip content="将选中省份打开,其余所有省份关闭">
-                    <el-button type="primary" @click="update">批量更新</el-button>
-                </el-tooltip>
-                <el-tooltip content="刷新网页,不会触发提交">
-                    <el-button type="primary" @click="refresh">刷新</el-button>
-                </el-tooltip>
-            </el-button-group>
+                <div style="display: inline-block;width: ${搜索框长度}px">
+                    <el-input
+                        v-model="input"
+                        type="textarea"
+                        autosize="true"
+                        @input="change"
+                        ref="inputRef"
+                        placeholder="省份"
+                        :formatter="formatter"
+                    />
+                </div>
+                <el-button-group >
+                    <el-tooltip content="清空输入">
+                        <el-button type="primary" @click="()=>{input='';change();}">清空</el-button>
+                    </el-tooltip>
+                    <el-tooltip content="将选中省份打开">
+                        <el-button type="primary" @click="add">打开</el-button>
+                    </el-tooltip>
+                    <el-tooltip content="将选中省份关闭">
+                        <el-button type="primary" @click="remove">关闭</el-button>
+                    </el-tooltip>
+                    <el-tooltip content="将选中省份打开,其余所有省份关闭">
+                        <el-button type="primary" @click="update">批量更新</el-button>
+                    </el-tooltip>
+                    <el-tooltip content="刷新网页,不会触发提交">
+                        <el-button type="primary" @click="refresh">刷新</el-button>
+                    </el-tooltip>
+                </el-button-group>
                 `,
             setup() {
                 const input = ref('');
@@ -68,7 +68,6 @@ export default function loadPlugin({
                     var pr = Enumerable.from(provinces).where(x => value.includes(x)).toArray();
                     //将省份用逗号隔开
                     pr = pr.join(",");
-                    console.log(pr);
                     return pr;
                 }
                 function SetMatchLineToValue(valToSet, resetAllToZero = false) {
@@ -151,14 +150,9 @@ export default function loadPlugin({
 
 
         createApp({
-            components: {
-                Comp,
-            },
-            template: /* template */`
-            <Comp/>
-        `,
-            setup() {
-            },
+            components: {Comp, },
+            template: /* template */` <Comp/>`,
+            setup() {},
         }).use(ElementPlus).mount(新增组件[0]);
 
     }
