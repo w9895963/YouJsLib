@@ -204,9 +204,9 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
 
 
 
-            //*当列表值改变时，触发
+            //*当搜索输入的时候
             watch(输入值, (val) => {
-                const 搜索命中的行 = 列表数据集.filter((x) => x.value.includes(val.trim()));
+                const 搜索命中的行 = 列表数据集.filter((x) => x.value.toUpperCase().includes(val.trim().toUpperCase()));
                 列表数据集.forEach((x) => {
                     x.dom.style.display = 'none';
                 })
