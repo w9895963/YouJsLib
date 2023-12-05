@@ -234,10 +234,12 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
                 配置[key] = 读取配置[key] ?? 预设配置[key] ?? 配置[key]
             }
 
-
+            // #按钮功能
             //*重置配置
             function 重置配置() {
-
+                for (const key in 配置) {
+                    配置[key] = 预设配置[key] ?? 配置[key];
+                }
             }
 
             return {
