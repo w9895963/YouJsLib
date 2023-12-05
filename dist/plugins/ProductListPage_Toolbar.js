@@ -1,11 +1,11 @@
 /**========================================================================
  **                         * *快捷工具栏-产品页面* *
- *?  过滤框
+ *?  过滤搜索框
  *?  
  *========================================================================**/
 
 
-
+// window.loadPlugin = async ({ 定位插入表格, 预设配置 } = {}) => {
 export default async function loadPlugin({ 定位插入表格, 预设配置 } = {}) {
 
 
@@ -61,8 +61,6 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
         },
         template: /* html */`
         <a-provider locale="zh_CN" :wave='false' :theme="{  }">
-        <div :style="{   }">
-
         <a-space align="center" :style="{  }">
             <a-typography-title :level="5" :style="{marginBottom:0  }">过滤</a-typography-title>
             <a-auto-complete
@@ -83,26 +81,28 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
 
             <a-popover placement="bottom" title="配置" trigger="click">
                 <template #content>
-                    <a-flex :gap="12" align="center" :style="{ }">
-                        <div :style="{flex:'0 0 auto'}">跳转目标</div>
-                        <a-select v-model:value="配置.跳转链接索引" :options="配置ui跳转选项列表" :style="{flex:'1 0 auto'}" />
+                    <a-flex vertical :gap="4">
+                        <a-flex :gap="12" align="center" :style="{ }">
+                            <div :style="{flex:'0 0 auto'}">跳转目标</div>
+                            <a-select v-model:value="配置.跳转链接索引" :options="配置ui跳转选项列表" :style="{flex:'1 0 auto'}" />
+                        </a-flex>
+                        <a-flex :gap="12" align="center">
+                            <div :style="{flex:'0 0 auto'}">索引目标</div>
+                            <a-select
+                                v-model:value="配置.索引列"
+                                :options="配置ui索引列选项"
+                                mode="multiple"
+                                :style="{flex:'1 0 auto'}"
+                            />
+                        </a-flex>
+                        <a-flex :gap="12" align="center">
+                            <div :style="{flex:'0 0 auto'}">输入框宽度</div>
+                            <a-input v-model:value="配置.输入框宽度" :style="{flex:'1 1 auto'}" />
+                        </a-flex>
+                        <a-button @click="重置配置">重置配置</a-button>
+                        <div :style="{flex:'0 0 auto'}">导出预设配置字符串</div>
+                        <a-textarea v-model:value="预设配置字符串" autosize :rows="2" />
                     </a-flex>
-                    <a-flex :gap="12" align="center">
-                        <div :style="{flex:'0 0 auto'}">索引目标</div>
-                        <a-select
-                            v-model:value="配置.索引列"
-                            :options="配置ui索引列选项"
-                            mode="multiple"
-                            :style="{flex:'1 0 auto'}"
-                        />
-                    </a-flex>
-                    <a-flex :gap="12" align="center">
-                        <div :style="{flex:'0 0 auto'}">输入框宽度</div>
-                        <a-input v-model:value="配置.输入框宽度" :style="{flex:'1 1 auto'}" />
-                    </a-flex>
-                    <a-button @click="重置配置">重置配置</a-button>
-                    <div :style="{flex:'0 0 auto'}">导出预设配置字符串</div>
-                    <a-textarea v-model:value="预设配置字符串" autosize :rows="2" />
                 </template>
                 <a-button
                     :style="{width:'36px',height:'36px',display:'flex',justifyContent: 'center', backgroundColor: '#faebd700',border: 0 ,  flexWrap: 'wrap',   alignContent: 'center', }"
@@ -133,7 +133,7 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
                 </a-button>
             </a-popover>
         </a-space>
-        </div>
+        
         </a-provider>
     `,
         setup() {
@@ -149,7 +149,10 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
             const 配置ui跳转选项列表 = ref([{}]);
             const 配置ui索引列选项 = ref([]);
             const 预设配置字符串 = ref('');
-
+            var 列表数据集 = [{
+                dom: null,
+                匹配文本: ''
+            }];
 
             //*构建 跳转链接引选项 
             const 跳转链接标题集合 = Array.from(document.querySelectorAll('.result-wrap tr')[1].children).flatMap((x, i) => {
@@ -172,41 +175,19 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
                 }
             });
 
-            //*构建 列表数据
-            var 列表数据集 = [];
-            const trs = document.querySelectorAll('.result-wrap tr');
-            const trArr = Array.from(trs).filter((tr, i) => i > 0);
-            列表数据集 = trArr.map((tr) => ({
-                value: Array.from(tr.children)
-                    .filter((x, i) => 配置.索引列.includes(i))
-                    .map(x => Array.from(x.childNodes)
-                        .filter((item) => item.nodeType == Node.TEXT_NODE)
-                        .map((item) => item.textContent).join(' ')
-                    ).join(' '),
-                dom: tr,
-                jumpHref: tr.querySelectorAll('a')[配置.跳转链接索引].href
-            }));
-
-
-            function 构建过滤输入框选项() {
-                //*构建 过滤器选项
-                过滤输入框选项.value = 列表数据集.map((x) => ({
-                    value: Array.from(x.dom.children)
-                        .filter((x, i) => 配置.索引列.includes(i))
-                        .map(x => Array.from(x.childNodes)
-                            .filter((item) => item.nodeType == Node.TEXT_NODE)
-                            .map((item) => item.textContent).join(' ')
-                        ).join(' '),
-                }));
-            }
-
 
 
 
 
             //*当搜索输入的时候
             watch(输入值, (val) => {
-                const 搜索命中的行 = 列表数据集.filter((x) => x.value.toUpperCase().includes(val.trim().toUpperCase()));
+                const 输入值预处理_输入分段序列 = val.trim().toUpperCase().split(' ').filter((x) => x.length > 0);
+
+                function 匹配规则(domText) {
+                    return 输入值预处理_输入分段序列.every((x) => domText.toUpperCase().includes(x));
+                }
+
+                const 搜索命中的行 = 列表数据集.filter(x => 匹配规则(x.匹配文本));
                 列表数据集.forEach((x) => {
                     x.dom.style.display = 'none';
                 })
@@ -234,6 +215,29 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
                 配置[key] = 读取配置[key] ?? 预设配置[key] ?? 配置[key]
             }
 
+
+            构建过滤输入框选项();
+            function 构建过滤输入框选项() {
+                //*构建 列表数据
+                const trs = document.querySelectorAll('.result-wrap tr');
+                const trArr = Array.from(trs).filter((tr, i) => i > 0);
+                列表数据集 = trArr.map((tr) => ({
+                    dom: tr,
+                    匹配文本: ''
+                }));
+
+                列表数据集.forEach((x) => x.匹配文本 = Array.from(x.dom.children)
+                    .filter((x, i) => 配置.索引列.includes(i))
+                    .map(x => Array.from(x.childNodes)
+                        .map((item) => item.textContent).join(' '))
+                    .join(' '));
+                //*构建 过滤器选项
+                过滤输入框选项.value = 列表数据集.map((x) => ({
+                    value: x.匹配文本,
+                }));
+
+            }
+
             // #按钮功能
             //*重置配置
             function 重置配置() {
@@ -254,7 +258,7 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
         }
     })
         .use(antd)
-        .mount('#app_toolBar');
+        .mount(appDom);
 
 
 
