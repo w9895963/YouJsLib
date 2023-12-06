@@ -1,11 +1,9 @@
 /**========================================================================
  **                         * *快捷工具栏-产品页面* *
  *?  过滤搜索框
- *?  
  *========================================================================**/
 
 
-// window.loadPlugin = async ({ 定位插入表格, 预设配置 } = {}) => {
 export default async function loadPlugin({ 定位插入表格, 预设配置 } = {}) {
 
 
@@ -40,8 +38,10 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
     });
 
 
-    const { createApp, ref, reactive, computed, watch } = Vue;
+    const { createApp, ref, reactive, watch } = Vue;
     const { zh_CN } = antd.locales;
+
+
 
 
     const appDom = document.createElement('div');
@@ -55,17 +55,14 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
     document.querySelector(定位插入表格).before(appDom);
 
 
-    createApp({
-        components: {
-            zh_CN
-        },
+    const app = {
         template: /* html */`
-        <a-provider locale="zh_CN" :wave='false' :theme="{  }">
         <a-space align="center" :style="{  }">
             <a-typography-title :level="5" :style="{marginBottom:0  }">过滤</a-typography-title>
             <a-auto-complete
                 v-model:value="输入值"
                 allowClear
+                :filterOption="(input,op)=>搜索匹配(input,op.value)"
                 :options="过滤输入框选项"
                 :style="{width:配置.输入框宽度+'px'}"
             />
@@ -133,9 +130,7 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
                 </a-button>
             </a-popover>
         </a-space>
-        
-        </a-provider>
-    `,
+        `,
         setup() {
             //*共享数据
             const 输入值 = ref('');
@@ -183,11 +178,10 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
             watch(输入值, (val) => {
                 const 输入值预处理_输入分段序列 = val.trim().toUpperCase().split(' ').filter((x) => x.length > 0);
 
-                function 匹配规则(domText) {
-                    return 输入值预处理_输入分段序列.every((x) => domText.toUpperCase().includes(x));
-                }
 
-                const 搜索命中的行 = 列表数据集.filter(x => 匹配规则(x.匹配文本));
+
+
+                const 搜索命中的行 = 列表数据集.filter(x => 搜索匹配(val, x.匹配文本));
                 列表数据集.forEach((x) => {
                     x.dom.style.display = 'none';
                 })
@@ -246,6 +240,12 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
                 }
             }
 
+            // #共享方法
+            function 搜索匹配(输入文本, 匹配文本) {
+                const inputArray = 输入文本.trim().toUpperCase().split(' ').filter((x) => x.length > 0)
+                return inputArray.every((x) => 匹配文本.toUpperCase().includes(x))
+            }
+
             return {
                 输入值,
                 过滤输入框选项,
@@ -253,9 +253,24 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
                 配置ui跳转选项列表,
                 配置ui索引列选项,
                 预设配置字符串,
-                重置配置
+                重置配置,
+                搜索匹配
             }
         }
+    };
+
+
+    createApp({
+        components: {
+            zh_CN,
+            app
+        },
+        template: /* html */`
+        <a-provider locale="zh_CN" :wave='false' :theme="{ }">
+            <app />
+        </a-provider>
+    `
+
     })
         .use(antd)
         .mount(appDom);
