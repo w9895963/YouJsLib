@@ -198,13 +198,14 @@ export default async function loadPlugin({ 定位插入表格, 预设配置 } = 
             })
 
             //*配置存取
+            const dataName = `${window.location.pathname}-表格过滤器-配置`;
             watch(配置, (val) => {
                 // console.log(val)
                 构建过滤输入框选项();
                 预设配置字符串.value = JSON.stringify(val);
-                localStorage.setItem('表格过滤器-配置', JSON.stringify(val));
+                localStorage.setItem(dataName, JSON.stringify(val));
             })
-            const 读取配置 = JSON.parse(localStorage.getItem('表格过滤器-配置')) ?? {};
+            const 读取配置 = JSON.parse(localStorage.getItem(dataName)) ?? {};
             for (const key in 配置) {
                 配置[key] = 读取配置[key] ?? 预设配置[key] ?? 配置[key]
             }
