@@ -18,7 +18,7 @@ export default async function createPlugin({
     过滤列索引 = [3, 4, 5],
 } = {}) {
     //*加载依赖
-    var 依赖 = 'https://cdn.jsdelivr.net/gh/w9895963/YouJsLib@1.0.8/dist/deps/ImportVueUiInjectDependencies.js';
+    var 依赖 = 'https://cdn.jsdelivr.net/gh/w9895963/YouJsLib@v2.0.0/dist/deps/ImportVueUiInjectDependencies.js';
     await (await import(依赖)).default();
     const { createApp, ref } = Vue;
 

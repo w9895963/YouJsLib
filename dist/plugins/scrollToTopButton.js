@@ -9,7 +9,7 @@ export default async function createPlugin({
     距离底部 = "100",
 } = {}) {
 
-    var 依赖 = 'https://cdn.jsdelivr.net/gh/w9895963/YouJsLib@1.0.8/dist/deps/ImportVueUiInjectDependencies.js';
+    var 依赖 = 'https://cdn.jsdelivr.net/gh/w9895963/YouJsLib@v2.0.0/dist/deps/ImportVueUiInjectDependencies.js';
     await (await import(依赖)).default();
     const { createApp, ref } = Vue;
 
